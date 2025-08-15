@@ -13,7 +13,14 @@ export class Game extends Phaser.Scene {
         this.platform.create(50, 250, 'ground');
         this.platform.create(750, 220, 'ground');
         this.player = new Player(this, 100, 450);
-        this.cursors = this.input.keyboard.createCursorKeys();
+        // WASD keys
+        this.keys = this.input.keyboard.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+            right: Phaser.Input.Keyboard.KeyCodes.D,
+            space: Phaser.Input.Keyboard.KeyCodes.SPACE
+        });
         this.stars = this.physics.add.group({
             key: 'star',
             repeat: 11,
@@ -40,21 +47,21 @@ export class Game extends Phaser.Scene {
 
     update(time) {
         this.player.update(time);
-        if(this.cursors.left.isDown){
+        if(this.keys.left.isDown){
             this.player.moveLeft();
         }
-        else if (this.cursors.right.isDown){
+        else if (this.keys.right.isDown){
             this.player.moveRight();
         }
         else {
             this.player.idle();
         }
 
-        if(this.cursors.up.isDown && !this.jumpKeyPressed){
+        if((this.keys.up.isDown || this.keys.space.isDown) && !this.jumpKeyPressed){
             this.jumpKeyPressed = true;
             this.player.jump(time)
         }
-        if(!this.cursors.up.isDown){
+        if(!this.keys.up.isDown && !this.keys.space.isDown){
             this.jumpKeyPressed = false;
         }
     }
