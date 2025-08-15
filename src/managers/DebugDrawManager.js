@@ -1,4 +1,4 @@
-export default class DebugDrawManager extends Phaser.Plugins.BasePlugin {
+export default class DebugDrawManager extends Phaser.Plugins.ScenePlugin {
     constructor(scene, pluginManager) {
         super(pluginManager);
         this.scene = scene;
@@ -9,11 +9,11 @@ export default class DebugDrawManager extends Phaser.Plugins.BasePlugin {
         this.manager = null;
     }
 
-    getManager(scene) {
-        if (!scene.debugDrawManager) {
-            scene.debugDrawManager = new DebugDrawManager(scene)
-        }
+    boot() {
+        this.manager = new DebugDrawManager(this.scene);
+        this.scene.debugDrawManager = this.manager;
     }
+    
     setDebugText(key, message) {
         let entry = this.entries.get(key);
         if (!entry) {
