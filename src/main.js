@@ -21,8 +21,12 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
+    plugins: {
+        scene: [
+            { key: 'DebugDrawManager', plugin: DebugDrawManager, mapping: 'debugDrawManager' }
+        ]
+    },
     scene: [
-        {key: 'DebugDrawManager', plugin: DebugDrawManager, mapping: 'debugDrawManager'},
         Boot,
         Preloader,
         Game,

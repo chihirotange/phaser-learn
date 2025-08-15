@@ -1,6 +1,6 @@
 export default class DebugDrawManager extends Phaser.Plugins.ScenePlugin {
     constructor(scene, pluginManager) {
-        super(pluginManager);
+        super(scene, pluginManager);
         this.scene = scene;
         this.startX = 10;
         this.startY = 10;
@@ -10,8 +10,7 @@ export default class DebugDrawManager extends Phaser.Plugins.ScenePlugin {
     }
 
     boot() {
-        this.manager = new DebugDrawManager(this.scene);
-        this.scene.debugDrawManager = this.manager;
+        this.scene.debugDrawManager = this;
     }
     
     setDebugText(key, message) {
@@ -22,12 +21,13 @@ export default class DebugDrawManager extends Phaser.Plugins.ScenePlugin {
                 this.startX,
                 this.startY + this.entries.size * this.lineHeight,
                 message,
-                { fontSize: '16px', fill: '#fff' }
+                { fontSize: '11px', fill: '#00ff44ff' }
             );
             this.entries.set(key, { textObj, message });
         } else {
             // Update existing text
             entry.message = message;
+            entry.textObj.setText(message);
         }
         this._updatePositions();
     }

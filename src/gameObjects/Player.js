@@ -12,16 +12,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         // jump
         this.jumpBufferTime = 0;
-        this.jumpBufferDuration = 300;
-        this.jumpDebug = scene.add.text(10, 50, 'bc', {fontSize: '16px', fill:'#111'})
+        this.jumpBufferDuration = 400;
     }
-
+    
     update(time) {
         if (this.body.blocked.down){
             this.jumpBufferTime = time;
         }
         const bufferRemaining = Math.max(0, this.jumpBufferDuration - (time - this.jumpBufferTime))
-        this.jumpDebug.setText(`${bufferRemaining.toFixed(0)}`)
+        this.scene.debugDrawManager.setDebugText("jumpBufferTime", "Jump buffer: " + bufferRemaining.toFixed(0));
     }
 
     initAnimations() {
