@@ -1,4 +1,5 @@
 import {Player} from '../gameObjects/Player.js';
+import { DebugDrawManager } from '../managers/DebugDrawManager.js';
 
 export class Game extends Phaser.Scene {
     constructor() {
@@ -18,7 +19,10 @@ export class Game extends Phaser.Scene {
             key: 'star',
             repeat: 11,
             setXY: {x: 12, y:0, stepX: 70}
-        })
+        });
+        //control
+        this.jumpKeyPressed = false;
+
         this.stars.children.iterate(child =>
             {
                 child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
@@ -38,6 +42,7 @@ export class Game extends Phaser.Scene {
     }
 
     update(time) {
+        this.player.update(time);
         if(this.cursors.left.isDown){
             this.player.moveLeft();
         }
@@ -48,8 +53,12 @@ export class Game extends Phaser.Scene {
             this.player.idle();
         }
 
-        if (this.cursors.up.isDown){
-            this.player.jump();
+        if(this.cursors.up.isDown && !this.jumpKeyPressed){
+            this.jumpKeyPressed = true;
+            this.player.jump(time)
+        }
+        if(!this.cursors.up.isDown){
+            this.jumpKeyPressed = false;
         }
     }
 

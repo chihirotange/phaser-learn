@@ -9,6 +9,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.setGravityY(300);
         this.setCollideWorldBounds(true);
         this.initAnimations()
+
+        // jump
+        this.jumpBufferTime = 0;
+        this.jumpBufferDuration = 300;
+        this.jumpDebug = scene.add.text(10, 50, 'bc', {fontSize: '16px', fill:'#111'})
+    }
+
+    update(time) {
+        if (this.body.blocked.down){
+            this.jumpBufferTime = time;
+        }
+        const bufferRemaining = Math.max(0, this.jumpBufferDuration - (time - this.jumpBufferTime))
+        this.jumpDebug.setText(`${bufferRemaining.toFixed(0)}`)
     }
 
     initAnimations() {
@@ -48,10 +61,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.anims.play('turn');
     }
 
-    jump() {
-        if (this.body.blocked.down)
+    jump(time) {
+        if (this.body.blocked.down || time - this.jumpBufferTime <= this.jumpBufferDuration)
         {
-            this.setVelocityY(-500)
+            this.setVelocityY(-500);
+            this.jumpBufferTime = 0;
         }
     }
 }
